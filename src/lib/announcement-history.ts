@@ -6,7 +6,8 @@ import { BOAT_OFFER, boatClaimMailto } from "@/lib/boat-offer";
 import type { CloudSource } from "@/lib/cloud-plan";
 import type { OnboardingStatus } from "@/lib/onboarding";
 import { BOAT_OFFER_NOTICE, CLOUD_INTRO, dismissNotice, GROK_MOVE_NOTICE, MODELGO_OFFER_NOTICE, noticeSeen, PRODUCT_HUNT_NOTICE, PRODUCT_HUNT_UNTIL, PRODUCT_HUNT_URL,
-  TEAMS_NOTICE, WHATS_NEW_NOTICE } from "@/lib/notices";
+  promotionNotice, TEAMS_NOTICE, WHATS_NEW_NOTICE } from "@/lib/notices";
+import { PROMOTIONS } from "@/lib/promotions";
 import type { LocaleKey } from "@/locales";
 import type { ConfigStatus } from "@/state/config-status";
 import { api } from "@/state/store";
@@ -87,10 +88,10 @@ export type HistoryItem =
 export function announcementHistory({ facts, cards, feedUpdatedAt, now }: {
   facts: HistoryFacts; cards: readonly AnnouncementCard[]; feedUpdatedAt: number | null; now: number;
 }): HistoryItem[] {
-  const builtIn: HistoryItem[] = BUILT_IN_ANNOUNCEMENTS.filter(entry => entry.for(facts)).map(entry => ({
+  const builtIn: HistoryItem[] = BUILT_IN_ANNOUNCEMENTS.filter(entry => (PROMOTIONS || !promotionNotice(entry.id)) && entry.for(facts)).map(entry => ({
     source: "built-in", id: entry.id, at: Date.parse(entry.date), entry, ended: typeof entry.until === "number" && now >= entry.until,
   }));
-  const feed: HistoryItem[] = cards.map(card => ({ source: "feed", id: card.id, at: card.starts ? Date.parse(card.starts) : feedUpdatedAt ?? now, card }));
+  const feed: HistoryItem[] = (PROMOTIONS ? cards : []).map(card => ({ source: "feed", id: card.id, at: card.starts ? Date.parse(card.starts) : feedUpdatedAt ?? now, card }));
   return [...builtIn, ...feed].map((item, order) => ({ item, order })).sort((a, b) => b.item.at - a.item.at || a.order - b.order).map(({ item }) => item);
 }
 

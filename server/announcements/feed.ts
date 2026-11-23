@@ -12,7 +12,7 @@ import { ANNOUNCEMENTS_URL, liveCards, parseAnnouncementFeed, type AnnouncementC
 import { writeFileAtomic } from "../atomic.ts";
 import { DATA_DIR } from "../config.ts";
 
-/** "1" stops the download and every remote card on this server's pages, the bundled ones included. */
+/** Off unless this is "0": no download, and no remote card on this server's pages, the bundled ones included. */
 export const ANNOUNCEMENTS_DISABLE_ENV = "OMB_DISABLE_ANNOUNCEMENTS";
 export const ANNOUNCEMENTS_TTL_MS = 60 * 60 * 1000;
 /** Back off failed fetches, so an offline computer does not try on every page load. */
@@ -68,7 +68,7 @@ export class AnnouncementStore {
   }
 
   get disabled(): boolean {
-    return (this.options.env ?? process.env)[ANNOUNCEMENTS_DISABLE_ENV] === "1";
+    return (this.options.env ?? process.env)[ANNOUNCEMENTS_DISABLE_ENV] !== "0";
   }
 
   /** The newest usable copy. Reads the disk cache once and never waits on the network. */

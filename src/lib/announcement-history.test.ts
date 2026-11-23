@@ -1,4 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+// The promotion code is off in this build (src/lib/promotions.ts); these tests keep it working for a build that turns it on.
+vi.mock("@/lib/promotions", () => ({ PROMOTIONS: true }));
 vi.mock("@/state/store", () => ({ api: vi.fn() }));
 import { api } from "@/state/store";
 import { EMPTY_ONBOARDING, type OnboardingStatus } from "@/lib/onboarding";

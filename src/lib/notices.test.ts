@@ -1,4 +1,6 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
+// The promotion code is off in this build (src/lib/promotions.ts); these tests keep it working for a build that turns it on.
+vi.mock("@/lib/promotions", () => ({ PROMOTIONS: true }));
 import { EMPTY_ONBOARDING, type OnboardingStatus } from "@/lib/onboarding";
 import { withTourReset } from "@/lib/guided-tour";
 import { DESKTOP_NOTICES } from "../../electron/desktop-prefs.mjs";
