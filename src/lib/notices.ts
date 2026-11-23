@@ -1,4 +1,5 @@
 import { hintSeen, hintSeenPatch, type OnboardingStatus } from "@/lib/onboarding";
+import { PROMOTIONS } from "@/lib/promotions";
 
 /** "MausBot is better with your team": every person sees it once, on every surface but a branded build or an organization's
  * desktop, ahead of every other notice. On a Team Cloud its record is each person's (TEAM_PERSONAL_HINTS). */
@@ -64,6 +65,10 @@ const FOLLOWING_CARDS: readonly NoticeId[] = [MODELGO_OFFER_NOTICE, ANNOUNCEMENT
 /** Notices the person has to act on. The sponsor's card and an announcement card never go ahead of one, even one left for a
  * later launch: they wait for that launch and follow it there. */
 export const MUST_ACT: readonly NoticeId[] = [GROK_MOVE_NOTICE, PHONE_UPDATE_NOTICE, CLOUD_TRIAL_NOTICE, CLOUD_NOTICE];
+/** Notices that sell something or ask a favour: a sponsor, MausBot Cloud and Teams, Product Hunt, a GitHub star. */
+export const PROMOTION_NOTICES: readonly NoticeId[] = [TEAMS_NOTICE, WHATS_NEW_NOTICE, PRODUCT_HUNT_NOTICE, CLOUD_INTRO, MODELGO_OFFER_NOTICE, BOAT_OFFER_NOTICE,
+  ANNOUNCEMENT_NOTICE, STAR_NOTICE];
+export const promotionNotice = (id: string): boolean => (PROMOTION_NOTICES as readonly string[]).includes(id);
 
 /** `launch`: the notice this launch already showed (launchNotice), the only one besides FOLLOWERS that may show again in it.
  * `closed`: that notice was closed in this page, so it doesn't come back however its facts read. The following cards follow
@@ -72,6 +77,7 @@ export function nextNotice(facts: NoticeFacts, seen: (id: NoticeId) => boolean, 
   const launchUp = launch !== null && !closed && !seen(launch) && facts[launch] !== false;
   let held = false;
   for (const id of NOTICES) {
+    if (!PROMOTIONS && promotionNotice(id)) continue;
     if (seen(id)) continue;
     if ((closed || (launch !== null && id !== launch)) && !FOLLOWERS.includes(id)) {
       if (id !== launch && MUST_ACT.includes(id) && facts[id] !== false) held = true;

@@ -6,6 +6,7 @@ import { useEffect, useSyncExternalStore } from "react";
 import { track } from "@/lib/analytics";
 import { hintSeen, type OnboardingStatus } from "@/lib/onboarding";
 import { localDay } from "@/lib/notices";
+import { PROMOTIONS } from "@/lib/promotions";
 import type { CloudPlanView } from "@/lib/cloud-plan";
 import type { ManagedPolicySummary } from "@/state/config-status";
 import { api, type AppState } from "@/state/store";
@@ -70,8 +71,9 @@ const snapshot = () => cards;
  * again once the last answer is an hour old, so a page in use follows the file without a timer of its own. */
 export function useAnnouncementCards(enabled: boolean, now: () => number = Date.now): AnnouncementCard[] {
   const current = useSyncExternalStore(subscribe, snapshot, snapshot);
-  useEffect(() => { if (enabled) ask(now()); });
-  return enabled ? current : [];
+  const asks = enabled && PROMOTIONS;
+  useEffect(() => { if (asks) ask(now()); });
+  return asks ? current : [];
 }
 
 /** When the cards' file last changed (epoch ms), as the server said; null before it answers or from an older server. */

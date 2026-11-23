@@ -9,6 +9,7 @@ import { useConnectAiPlace, useConnectAiSteps, useDialogOpened } from "@/lib/con
 import { t } from "@/lib/i18n";
 import { engineDisplayName } from "@/lib/engine-name";
 import { modelgoOfferable } from "@/lib/modelgo-offer";
+import { PROMOTIONS } from "@/lib/promotions";
 import { aiChoices, aiWorks, firstAis, organisationSignIn, signInFollows } from "@/lib/onboarding";
 import { api, useStore, type InstanceInfo } from "@/state/store";
 import { freeFallback } from "../../../shared/ai-ranking";
@@ -88,7 +89,7 @@ export function ConnectAi({ hosted = false, tested, onChoose }: { hosted?: boole
   const others = offered.filter((instance) => !leading.includes(instance));
   const modelgoReady = state.instances.some((instance) => instance.driverKind === "modelgo" && engineReady(instance));
   // Hosted: the organization provides the AI and refuses a key of the person's own.
-  const showModelgo = !hosted && !modelgoReady && modelgoOfferable(state.config?.managedPolicy);
+  const showModelgo = PROMOTIONS && !hosted && !modelgoReady && modelgoOfferable(state.config?.managedPolicy);
   const modelgo = others.find((instance) => instance.driverKind === "modelgo");
   const otherRows = others.filter((instance) => !(showModelgo && instance === modelgo));
 

@@ -10,6 +10,7 @@ import { announcementConditions, announcementPlan, announcementPlatform, announc
 import { boatOfferRuns } from "@/lib/boat-offer";
 import { modelgoOfferable, reportModelgoOffer } from "@/lib/modelgo-offer";
 import { brandStatus } from "@/lib/brand";
+import { PROMOTIONS } from "@/lib/promotions";
 import { buyOfferAllowed, cloudNoticeKind, cloudPlanView, cloudTrialNotice, cloudTrialView, offerTrialDays } from "@/lib/cloud-plan";
 import { jobRoutine, useCloudIntent } from "@/lib/cloud-intent";
 import { CLOUD_INTENT_GIVEN, cloudSetupStage } from "@/lib/cloud-setup";
@@ -141,7 +142,7 @@ export function AppNotices({ quiet = false, viewer = null, now = Date.now }: { q
   const whatsNewDue = !whatsNewHere || whatsNewSeen || organization === true ? false : !desktopState || organization === null ? null
     : desktopState.cloud && !desktopState.seen.includes(WHATS_NEW_NOTICE);
   const whatsNewFor = whatsNewDue === false ? null : whatsNewAudience(account);
-  const wantOffer = Boolean(bridge?.offer) && ((introAllowed && view !== null && buyOfferAllowed(view) && stage !== "done")
+  const wantOffer = PROMOTIONS && Boolean(bridge?.offer) && ((introAllowed && view !== null && buyOfferAllowed(view) && stage !== "done")
     || whatsNewFor === "none" || whatsNewFor === "own");
   const offerKey = wantOffer ? `${view?.kind}:${JSON.stringify(account?.offer ?? null)}` : null;
   useEffect(() => {

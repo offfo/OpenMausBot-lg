@@ -3,6 +3,8 @@ import { createElement, Fragment } from "react";
 import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+// The promotion code is off in this build (src/lib/promotions.ts); these tests keep it working for a build that turns it on.
+vi.mock("@/lib/promotions", () => ({ PROMOTIONS: true }));
 import { setLocale } from "@/lib/i18n";
 
 const fx = vi.hoisted(() => ({

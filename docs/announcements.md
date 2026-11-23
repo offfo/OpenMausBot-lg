@@ -203,9 +203,11 @@ with the cards). Give a card `starts` when its date matters.
 
 ## Turning it off
 
-- **`OMB_DISABLE_ANNOUNCEMENTS=1`** in the server's environment stops the download and every remote card on that server's
-  pages, the bundled ones included. For a self-hosted server or an open-source build that should never show them. The
-  desktop app's own server inherits the app's environment, so it holds there when the app is started with it set.
+- **This fork ships with them off.** `PROMOTIONS` in `src/lib/promotions.ts` is `false`, so the page shows no sponsor card,
+  Cloud or Teams offer, Product Hunt or star card, and no card from this file, and never asks the server for one.
+- **The server downloads nothing unless `OMB_DISABLE_ANNOUNCEMENTS=0`** is in its environment. Unset, or any other value,
+  means no download and no remote card on that server's pages, the bundled ones included. The desktop app's own server
+  inherits the app's environment.
 - **No in-app switch governs these cards.** The app has no setting for promotional popups: the product-updates question is
   about email, and the usage-analytics switch only stops the counting. A person closes a card with Not now or the X, and
   never sees that card again.

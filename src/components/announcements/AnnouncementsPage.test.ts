@@ -2,6 +2,8 @@
 import { act, createElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+// The promotion code is off in this build (src/lib/promotions.ts); these tests keep it working for a build that turns it on.
+vi.mock("@/lib/promotions", () => ({ PROMOTIONS: true }));
 import { announcementHistory, type HistoryFacts } from "@/lib/announcement-history";
 import { setLocale } from "@/lib/i18n";
 import { TEAMS_NOTICE } from "@/lib/notices";
